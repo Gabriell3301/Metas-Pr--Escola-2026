@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metas da Pré-Escola 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        nav button:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        nav button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Página de Metas */
+        .metas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .meta-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .meta-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .meta-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .meta-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .meta-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .status-pendente {
+            background: #ffecec;
+            color: #e74c3c;
+        }
+
+        .status-progresso {
+            background: #e3f2fd;
+            color: #2196f3;
+        }
+
+        .status-concluida {
+            background: #e8f5e9;
+            color: #4caf50;
+        }
+
+        /* Página de Galeria */
+        .filtro-toggle {
+            position: fixed;
+            top: 120px;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 50;
+            display: none;
+        }
+
+        .filtro-toggle.show {
+            display: block;
+        }
+
+        .filtro-toggle:hover {
+            background: #5568d3;
+            transform: scale(1.1);
+        }
+
+        .filtro-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+
+        .filtro-container.active {
+            max-height: 200px;
+            opacity: 1;
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        .filtro-container label {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .filtro-container input,
+        .filtro-container select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .filtro-container input:focus,
+        .filtro-container select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filtro-container button {
+            padding: 0.5rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .filtro-container button:hover {
+            background: #5568d3;
+        }
+
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .foto-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .foto-card:hover {
+            transform: scale(1.05);
+        }
+
+        .foto-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .foto-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .foto-card:hover .foto-overlay {
+            transform: translateY(0);
+        }
+
+        .foto-data {
+            color: #9ca3af;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .foto-descricao {
+            color: white;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        /* Modal de Foto Expandida */
+        .foto-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        .foto-modal.active {
+            display: flex;
+        }
+
+        .foto-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: zoomIn 0.3s;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .foto-modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .foto-modal-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 2rem;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .foto-modal-data {
+            color: #9ca3af;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .foto-modal-descricao {
+            color: white;
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .foto-modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .foto-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><button onclick="showPage('metas')" class="active" id="btn-metas">Metas</button></li>
+            <li><button onclick="showPage('galeria')" id="btn-galeria">Galeria de Fotos</button></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Página de Metas -->
+        <div id="metas" class="page active">
+            <h1>🎯 Metas da Pré-Escola 2026</h1>
+            <div class="metas-grid">
+                <div class="meta-card">
+                    <h3>Viagem de Grupo</h3>
+                    <p>Irmos a algum sitio de flixbus por um dia (4º: Aveiro cheira mal).</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Praia em Grupo</h3>
+                    <p>Ir TODOS MESMO para praia (No verão porque tá frio).</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ter um RPG</h3>
+                    <p>Juntar-se para jogar um RPG em grupo.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Festa de Aniversário</h3>
+                    <p>Celebrar todos os aniversários juntos ao longo do ano.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ir com o 4º a Penela</h3>
+                    <p>Ir todos para Penela (Seja lá onde isso for).</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Fazer um picnic-color</h3>
+                    <p>Um picnic porém todos levam uma comida de uma cor.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Chamar a Nono de preta 100x</h3>
+                    <p>Porque Não?</p>
+                    <span class="meta-status status-progresso">Em Progresso</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Arranjar uma gótica rabuda para o Quarta</h3>
+                    <p>É bué sério quero concretizar o desejo do quarta. -Tom Tom</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ter boas memórias slaa num sei mais 😔💕</h3>
+                    <p>Juntar boa memórias e no fim do ano fazer um recap incrível.</p>
+                    <span class="meta-status status-progresso">Em Progresso</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ir a Moita</h3>
+                    <p>Laser quer carregar todos pra uma aldeia no fim do mundo.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ir a Feira de Maio</h3>
+                    <p>Ir todos a feira de Maio (Em Maio) e ir no Carrinho de Choque.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Noite de Karaoke</h3>
+                    <p>Meio alto explicativo, mas noite do Karaoke.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Troca de roupas</h3>
+                    <p>Fazer um convivo em que temos todos que usar a roupa de outra pessoa.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Festa do Pijama</h3>
+                    <p>Fazer festa do pijama e dormir todos la(isso para a lara msm love u).</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Um kebab de jeito</h3>
+                    <p>Alguém pegue a responsabilidade de nos levar a um kebab realmente bom.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+                <div class="meta-card">
+                    <h3>Ficarmos fodidos na SAO</h3>
+                    <p>Autoexplicativo, não lembrar da semana interia de tanto beber.</p>
+                    <span class="meta-status status-pendente">Pendente</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Galeria -->
+        <div id="galeria" class="page">
+            <h1>📸 Galeria de Momentos</h1>
+            
+            <button class="filtro-toggle" id="filtroToggle" onclick="toggleFiltro()">🔍</button>
+            
+            <div class="filtro-container" id="filtroContainer">
+                <label>Filtrar por:</label>
+                <select id="filtroMes" onchange="filtrarGaleria()">
+                    <option value="">Todos os meses</option>
+                    <option value="01">Janeiro</option>
+                    <option value="02">Fevereiro</option>
+                    <option value="03">Março</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Maio</option>
+                    <option value="06">Junho</option>
+                    <option value="07">Julho</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+                
+                <input type="number" id="filtroAno" placeholder="Ano" min="2020" max="2030" onchange="filtrarGaleria()">
+                
+                <button onclick="limparFiltros()">Limpar Filtros</button>
+            </div>
+            
+            <div class="galeria-grid">
+                <div class="foto-card" data-date="2026-01-15" onclick="abrirModal(this)">
+                    <img src="photos/Felicidade Pura haha.jpg" alt="Foto 1">
+                    <div class="foto-overlay">
+                        <div class="foto-data">1 de Janeiro, 2026</div>
+                        <div class="foto-descricao">Antes da Bebida.</div>
+                    </div>
+                </div>
+                <div class="foto-card" data-date="2026-01-22" onclick="abrirModal(this)">
+                    <img src="photos/Espelho Photo.jpg" alt="Foto 2">
+                    <div class="foto-overlay">
+                        <div class="foto-data">1 de Janeiro, 2026</div>
+                        <div class="foto-descricao">Uma com Quase Todos.</div>
+                    </div>
+                </div>
+                <div class="foto-card" data-date="2026-01-28" onclick="abrirModal(this)">
+                    <img src="photos/Beijin Sex.jpg" alt="Foto 3">
+                    <div class="foto-overlay">
+                        <div class="foto-data">1 de Janeiro, 2026</div>
+                        <div class="foto-descricao">Depois da Bebida.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Foto Expandida -->
+    <div class="foto-modal" id="fotoModal" onclick="fecharModal()">
+        <button class="foto-modal-close" onclick="fecharModal()">×</button>
+        <div class="foto-modal-content" onclick="event.stopPropagation()">
+            <img id="modalImg" src="" alt="Foto expandida">
+            <div class="foto-modal-info">
+                <div class="foto-modal-data" id="modalData"></div>
+                <div class="foto-modal-descricao" id="modalDescricao"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('btn-' + pageId).classList.add('active');
+            
+            // Mostra/esconde o botão de filtro apenas na galeria
+            const filtroToggle = document.getElementById('filtroToggle');
+            if (pageId === 'galeria') {
+                filtroToggle.classList.add('show');
+            } else {
+                filtroToggle.classList.remove('show');
+                document.getElementById('filtroContainer').classList.remove('active');
+            }
+        }
+
+        function toggleFiltro() {
+            const filtroContainer = document.getElementById('filtroContainer');
+            filtroContainer.classList.toggle('active');
+        }
+
+        function filtrarGaleria() {
+            const mes = document.getElementById('filtroMes').value;
+            const ano = document.getElementById('filtroAno').value;
+            const fotos = document.querySelectorAll('.foto-card');
+
+            fotos.forEach(foto => {
+                const dataFoto = foto.getAttribute('data-date');
+                let mostrar = true;
+
+                if (mes && !dataFoto.includes(`-${mes}-`)) {
+                    mostrar = false;
+                }
+
+                if (ano && !dataFoto.startsWith(ano)) {
+                    mostrar = false;
+                }
+
+                foto.style.display = mostrar ? 'block' : 'none';
+            });
+        }
+
+        function limparFiltros() {
+            document.getElementById('filtroMes').value = '';
+            document.getElementById('filtroAno').value = '';
+            
+            document.querySelectorAll('.foto-card').forEach(foto => {
+                foto.style.display = 'block';
+            });
+        }
+
+        function abrirModal(fotoCard) {
+            const modal = document.getElementById('fotoModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalData = document.getElementById('modalData');
+            const modalDescricao = document.getElementById('modalDescricao');
+            
+            const img = fotoCard.querySelector('img');
+            const data = fotoCard.querySelector('.foto-data').textContent;
+            const descricao = fotoCard.querySelector('.foto-descricao').textContent;
+            
+            modalImg.src = img.src;
+            modalData.textContent = data;
+            modalDescricao.textContent = descricao;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('fotoModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal com tecla ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                fecharModal();
+            }
+        });
+    </script>
+</body>
+</html>
